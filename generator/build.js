@@ -435,9 +435,14 @@ function renderFooter() {
 
 const day = value => String(value).slice(0, 10);
 
-function rows(items, emptyKey) {
+const grantNote = grant => {
+    const key = `grant_${grant.toLowerCase().replace(/[.-]/g, "_")}`;
+    return inode("span", key in en ? key : "grant_unknown", null, 'class="rows-note"');
+};
+
+function rows(items, emptyKey, note) {
     return items.length
-        ? `<ul class="rows">${items.map(item => `<li><code>${esc(item)}</code></li>`).join("")}</ul>`
+        ? `<ul class="rows">${items.map(item => `<li><code>${esc(item)}</code>${note ? note(item) : ""}</li>`).join("")}</ul>`
         : inode("p", emptyKey, null, 'class="rows-empty"');
 }
 
@@ -453,7 +458,7 @@ function renderDetails(script, scripts) {
     return [
         block("detail_runs_on", rows([...script.match, ...script.include], "detail_no_match")),
         script.exclude.length ? block("detail_excluded", rows(script.exclude)) : "",
-        block("detail_permissions", rows(grants, "detail_no_permissions")),
+        block("detail_permissions", rows(grants, "detail_no_permissions", grantNote)),
         block("detail_info", `<dl class="facts">
                 ${inode("dt", "detail_version")}<dd>${esc(script.version || "-")}</dd>
                 ${inode("dt", "detail_updated")}<dd>${esc(day(script.updated))}</dd>

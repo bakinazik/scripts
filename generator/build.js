@@ -633,12 +633,13 @@ const flash = button => {
     setTimeout(() => button.classList.remove("copied"), 1500);
 };
 document.getElementById("copy").addEventListener("click", async event => {
+    const button = event.currentTarget;
     try {
         await navigator.clipboard.writeText(document.querySelector(".code code").textContent);
     } catch {
         return;
     }
-    flash(event.currentTarget);
+    flash(button);
 });
 document.getElementById("share").addEventListener("click", async event => {
     const button = event.currentTarget;

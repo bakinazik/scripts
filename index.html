@@ -580,6 +580,16 @@ a.settings-item{
     transition:color .2s ease;
 }
 
+.script-save:active {
+    animation: button-jump 0.2s ease;
+}
+
+@keyframes button-jump {
+    50% {
+        transform: scale(1.10);
+    }
+}
+
 .script-save:hover,
 .script-save.on{
     color:var(--accent);

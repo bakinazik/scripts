@@ -438,7 +438,7 @@ const SEARCH_FIELD = `<form class="bar-field" action="/search" method="get" role
             </button>
         </form>`;
 
-function renderNav(current = "") {
+function renderNav(current = "", second = "") {
     const links = MENU
         .map(item => inode("a", item.key, null, `class="bar-link" href="${esc(item.href)}"${item.href === current ? ' aria-current="page"' : ""}${item.external ? ' target="_blank" rel="noopener"' : ""}`))
         .join("\n        ");
@@ -452,7 +452,7 @@ function renderNav(current = "") {
             ${SEARCH_FIELD}
             ${settingsMenu(current)}
         </div>
-    </nav>
+    </nav>${second}
 </header>
 <script>${NAV_JS}${SAVED_JS}</script>
 ${I18N_SCRIPT}`;
@@ -539,14 +539,15 @@ ${pages.en[name].html}
 function renderProfile(author, authorSlug, list, css, tabs) {
     const countKey = list.length === 1 ? "count_one" : "count_other";
     const count = fill(word(countKey), { n: list.length });
+    const second = `\n<div class="second-header"><div class="second-header-inner"><span id="count" data-i18n="${countKey}"${varsAttr({ n: list.length })}>${count}</span>${tabs}</div></div>`;
     return `<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
 ${head({ title: `${author} - Userscripts`, description: `${count} by ${author}.`, css, route: `/u/${authorSlug}` })}
 </head>
 <body>
-${renderNav()}
-<div class="wrap">
+${renderNav("", second)}
+<main>
 
     <section class="profile-head">
         <span class="profile-avatar" aria-hidden="true">${esc([...author][0].toUpperCase())}</span>
@@ -558,12 +559,6 @@ ${renderNav()}
             </a>
         </div>
     </section>
-
-</div>
-
-<div class="second-header"><div class="second-header-inner"><span id="count" data-i18n="${countKey}"${varsAttr({ n: list.length })}>${count}</span>${tabs}</div></div>
-
-<main>
 
     <section class="scripts masonry" id="scripts">${list.map(script => renderCard(script)).join("")}</section>
 
@@ -787,6 +782,8 @@ async function main() {
     const { codeToHtml } = await import("shiki");
     const scripts = loadScripts();
     const template = fs.readFileSync(path.join(root, "index.html"), "utf8");
+    const second = template.match(/<div class="second-header">[\s\S]*?<\/div><\/div><\/div><\/div>/)[0];
+    const body = template.replace(second, "");
     const items = scripts.map(script => ({
         key: script.key,
         type: script.type,
@@ -799,7 +796,7 @@ async function main() {
         html: renderCard(script)
     }));
     const data = JSON.stringify(items).replace(/</g, "\\u003c");
-    const fromTemplate = view => template.replace("{{ICONS}}", () => `${seoMeta({ title: "Scripts", description: DESCRIPTION, route: "/" })}\n${ICON_LINKS}`).replace("{{FLAGS}}", () => FLAGS_LINK).replace("{{THEME_INIT}}", () => THEME_INIT).replace("{{NAV}}", () => renderNav(view === "saved" ? "/saved" : "")).replace("{{FOOTER}}", () => renderFooter()).replace("{{DATA}}", () => data).replace("{{VIEW}}", view);
+    const fromTemplate = view => body.replace("{{ICONS}}", () => `${seoMeta({ title: "Scripts", description: DESCRIPTION, route: "/" })}\n${ICON_LINKS}`).replace("{{FLAGS}}", () => FLAGS_LINK).replace("{{THEME_INIT}}", () => THEME_INIT).replace("{{NAV}}", () => renderNav(view === "saved" ? "/saved" : "", "\n" + second)).replace("{{FOOTER}}", () => renderFooter()).replace("{{DATA}}", () => data).replace("{{VIEW}}", view);
     const html = fromTemplate("home");
     const searchHtml = fromTemplate("search").replace("<title>Scripts</title>", () => `<title data-i18n="search_title">${itext("search_title")}</title>\n<meta name="robots" content="noindex">`);
 

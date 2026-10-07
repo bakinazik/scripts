@@ -211,11 +211,6 @@ main{
     height:16px;
 }
 
-.second-header{
-    margin:1.25rem 0 0;
-    border-bottom:1px solid var(--border);
-}
-
 .second-header-inner{
     display:flex;
     align-items:center;
@@ -226,8 +221,12 @@ main{
     font-size:.8rem;
 }
 
-.second-header+main{
-    padding-top:1rem;
+.bar:has(.second-header){
+    border-bottom-color:var(--border);
+}
+
+.bar~main .scripts{
+    margin-top:1rem;
 }
 
 .settings{

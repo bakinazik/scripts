@@ -876,7 +876,7 @@ if (savedView) {
     document.addEventListener("saved-change", render);
 }
 
-if (!searching) document.getElementById("logo").addEventListener("click", event => {
+if (view === "home") document.getElementById("logo").addEventListener("click", event => {
     event.preventDefault();
     window.scrollTo({ top: 0 });
 });

@@ -581,16 +581,20 @@ a.settings-item{
 }
 
 .script-save:active{
-    animation:button-jump .2s ease;
+    animation:button-jump .35s cubic-bezier(.34,1.56,.64,1);
 }
 
 @keyframes button-jump{
-    0%,100%{
+    0%{
         transform:scale(1);
     }
 
-    50%{
-        transform:scale(1.5);
+    45%{
+        transform:scale(1.25);
+    }
+
+    100%{
+        transform:scale(1);
     }
 }
 
@@ -608,6 +612,7 @@ a.settings-item{
 .script-save.on svg{
     fill:currentColor;
 }
+
 
 .script-footer{
     display:flex;

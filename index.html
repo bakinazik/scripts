@@ -697,9 +697,9 @@ a.settings-item{
 
 .tabs{display:flex;align-items:center;gap:.25rem}
 .count .tabs{margin-bottom:0}
-.count-tools{display:flex;align-items:center;gap:1rem}
+.count-tools{display:contents}
+@media(max-width:600px){.count .tab:not(.active) .tab-label{display:none}.count .tab{padding-inline:.55rem}}
 .script-meta small .kind{margin-inline-end:.4rem;padding:.05rem .35rem;border:1px solid var(--border);border-radius:4px;font-size:.65rem;font-weight:600;letter-spacing:.03em}
-@media(max-width:600px){.count-tools{gap:.25rem}}
 .tab{position:relative}
 .tab::before{content:"";position:absolute;left:.75rem;right:.75rem;bottom:-1px;height:2px;border-radius:2px;background:var(--accent);transform:scaleX(0);transform-origin:center;opacity:.5;transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .25s}
 .tab:hover::before{transform:scaleX(.4)}
@@ -801,10 +801,10 @@ select:focus-visible{
 
 <main>
 
-    <div class="count"><span id="count" aria-live="polite"></span><div class="count-tools"><div class="tabs" id="kind" role="tablist" aria-label="Type" data-i18n-aria-label="filter_aria">
-        <button class="tab" type="button" role="tab" aria-selected="false" data-kind="all" data-i18n="filter_all">All</button>
-        <button class="tab" type="button" role="tab" aria-selected="false" data-kind="script" data-i18n="filter_script">Scripts</button>
-        <button class="tab" type="button" role="tab" aria-selected="false" data-kind="style" data-i18n="filter_style">Styles</button>
+    <div class="count"><div class="count-tools"><div class="tabs" id="kind" role="tablist" aria-label="Type" data-i18n-aria-label="filter_aria">
+        <button class="tab" type="button" role="tab" aria-selected="false" data-kind="all" aria-label="All" data-i18n-aria-label="filter_all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h6v6h-6z"></path><path d="M14 4h6v6h-6z"></path><path d="M4 14h6v6h-6z"></path><path d="M14 14h6v6h-6z"></path></svg><span class="tab-label" data-i18n="filter_all">All</span></button>
+        <button class="tab" type="button" role="tab" aria-selected="false" data-kind="script" aria-label="Scripts" data-i18n-aria-label="filter_script"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8l-4 4l4 4"></path><path d="M17 8l4 4l-4 4"></path><path d="M14 4l-4 16"></path></svg><span class="tab-label" data-i18n="filter_script">Scripts</span></button>
+        <button class="tab" type="button" role="tab" aria-selected="false" data-kind="style" aria-label="Styles" data-i18n-aria-label="filter_style"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25z"></path><path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path><path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path><path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path></svg><span class="tab-label" data-i18n="filter_style">Styles</span></button>
     </div><div class="tabs" id="sort" role="tablist" aria-label="Sort scripts" data-i18n-aria-label="sort_aria">
         <button class="tab" type="button" role="tab" aria-selected="false" data-sort="new" aria-label="Newest" data-i18n-aria-label="sort_new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5.5a.5 .5 0 0 1 .5 -.5h4a.5 .5 0 0 1 .5 .5v4a.5 .5 0 0 1 -.5 .5h-4a.5 .5 0 0 1 -.5 -.5l0 -4"></path><path d="M5 14.5a.5 .5 0 0 1 .5 -.5h4a.5 .5 0 0 1 .5 .5v4a.5 .5 0 0 1 -.5 .5h-4a.5 .5 0 0 1 -.5 -.5l0 -4"></path><path d="M14 15l3 3l3 -3"></path><path d="M17 18v-12"></path></svg><span class="tab-label" data-i18n="sort_new">Newest</span></button>
         <button class="tab" type="button" role="tab" aria-selected="false" data-sort="old" aria-label="Oldest" data-i18n-aria-label="sort_old"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l7 0"></path><path d="M4 12l7 0"></path><path d="M4 18l9 0"></path><path d="M15 9l3 -3l3 3"></path><path d="M18 6l0 12"></path></svg><span class="tab-label" data-i18n="sort_old">Oldest</span></button>
@@ -826,18 +826,11 @@ const search = document.getElementById("search");
 const clear = document.getElementById("clear");
 const list = document.getElementById("scripts");
 const empty = document.getElementById("empty");
-const count = document.getElementById("count");
 const sort = document.getElementById("sort");
 const sortButtons = [...sort.querySelectorAll("button")];
 const kind = document.getElementById("kind");
 const kindButtons = [...kind.querySelectorAll("button")];
 const items = JSON.parse(document.getElementById("data").textContent);
-const showCount = n => {
-    const key = n === 1 ? "count_one" : "count_other";
-    count.setAttribute("data-i18n", key);
-    count.setAttribute("data-i18n-vars", JSON.stringify({ n }));
-    count.textContent = i18n.t(key, { n });
-};
 
 let filtered = items;
 let shown = 0;
@@ -905,7 +898,6 @@ function render() {
     shown = 0;
     fill();
     empty.style.display = filtered.length ? "none" : "block";
-    showCount(filtered.length);
     clear.hidden = !search.value;
     const next = new URLSearchParams();
     if (searching && search.value) next.set("q", search.value);

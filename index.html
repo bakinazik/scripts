@@ -301,10 +301,6 @@ a.settings-item{
     text-decoration:none;
 }
 
-.settings-item[aria-current=page]{
-    color:var(--accent);
-}
-
 .panel-link{
     display:none;
 }
@@ -670,12 +666,14 @@ a.settings-item{
     text-overflow:ellipsis;
 }
 
-.empty{
-    display:none;
-    padding:3rem 1rem;
-    color:var(--muted);
-    text-align:center;
-    font-size:.85rem;
+.empty {
+    display: none;
+    padding: 3rem 1rem;
+    color: var(--muted);
+    text-align: center;
+    font-size: .85rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
 }
 
 .tabs{display:flex;align-items:center;gap:.25rem}
@@ -696,7 +694,6 @@ a.settings-item{
     flex-shrink:0;
     gap:1rem;
     padding:1.25rem 0 1.5rem;
-    border-top:1px solid var(--border);
     color:var(--muted);
     font-size:.8rem;
 }

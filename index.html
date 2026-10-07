@@ -740,7 +740,7 @@ a.settings-item{
 .tabs{display:flex;align-items:center;gap:.25rem}
 .count .tabs{margin-bottom:0}
 .count-tools{display:contents}
-@media(max-width:600px){.count .tab:not(.active) .tab-label{display:none}.count .tab{padding-inline:.55rem}}
+@media(max-width:600px){.count{flex-wrap:wrap;row-gap:.25rem}.count #kind{flex:0 0 100%}.count #kind .tab{flex:1;justify-content:center}.count #sort{margin-inline-start:auto}.count #sort .tab:not(.active) .tab-label{display:none}.count .tab{padding-inline:.55rem}}
 .script-meta small .kind{margin-inline-end:.4rem;padding:.05rem .35rem;border:1px solid var(--border);border-radius:4px;font-size:.65rem;font-weight:600;letter-spacing:.03em}
 .tab{position:relative}
 .tab::before{content:"";position:absolute;left:.75rem;right:.75rem;bottom:-1px;height:2px;border-radius:2px;background:var(--accent);transform:scaleX(0);transform-origin:center;opacity:.5;transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .25s}

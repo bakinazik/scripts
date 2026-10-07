@@ -496,29 +496,27 @@ a.settings-item{
     .script.has-shots{
         display:grid;
         grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
-        grid-template-rows:auto 1fr auto;
         gap:.9rem 1.1rem;
     }
 
     .script.has-shots>.script-header,
-    .script.has-shots>.script-description{
-        grid-column:1;
-    }
-
-    .script.has-shots>.script-shots{
-        grid-column:2;
-        grid-row:1 / span 2;
-        align-self:stretch;
-    }
-
     .script.has-shots>.script-footer{
         grid-column:1 / -1;
     }
 
-    .script-shots img{
-        height:100%;
-        min-height:9rem;
-        aspect-ratio:auto;
+    .script.has-shots>.script-description{
+        grid-column:1;
+        grid-row:2;
+    }
+
+    .script.has-shots>.script-shots{
+        grid-column:2;
+        grid-row:2;
+        align-self:stretch;
+    }
+
+    .script.has-shots>.script-shots{
+        align-self:start;
     }
 }
 

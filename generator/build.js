@@ -301,7 +301,7 @@ function renderCard(script) {
     ].join(" ").toLowerCase();
 
     return `
-        <article class="script" data-type="${script.type}" data-search="${esc(search)}">
+        <article class="script${script.shots.length ? " has-shots" : ""}" data-type="${script.type}" data-search="${esc(search)}">
             <div class="script-header">
                 <div class="script-info">
                     <div class="script-icon">${icon(script)}</div>
@@ -321,7 +321,7 @@ function renderCard(script) {
 
             <p class="script-description">${esc(script.description)}</p>
 ${script.shots.length ? `
-            <a class="script-shots" href="${esc(script.path)}" tabindex="-1" aria-hidden="true">${script.shots.slice(0, 2).map(src => `<img src="${esc(src)}" alt="" loading="lazy" decoding="async">`).join("")}</a>
+            <a class="script-shots" href="${esc(script.path)}" tabindex="-1" aria-hidden="true"><img src="${esc(script.shots[0])}" alt="" loading="lazy" decoding="async"></a>
 ` : ""}
             <div class="script-footer">
                 ${renderDates(script)}

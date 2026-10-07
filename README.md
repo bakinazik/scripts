@@ -38,7 +38,7 @@ scripts/<username>/<name>/<name>.user.css
 scripts/<username>/<name>/*.png | *.jpg | *.jpeg | *.webp | *.gif | *.avif
 ```
 
-Each script or style lives in its own folder, and the file must be named after the folder. Any images in the same folder are detected automatically and shown as screenshots (up to two on the card, all of them on the detail page).
+Each script or style lives in its own folder, and the file must be named after the folder. Any images in the same folder are detected automatically and shown as screenshots (the first one on the card, all of them on the detail page).
 
 This structure automatically creates dedicated pages:
 

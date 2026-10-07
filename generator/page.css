@@ -79,3 +79,8 @@ body.page{--wrap:#58a6ff}
 .shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,18rem),1fr));gap:.6rem}
 .shots a{display:block}
 .shots img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid var(--border);border-radius:10px;background:var(--border)}
+.shots img{cursor:zoom-in}
+#lightbox{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.9);visibility:hidden;opacity:0;transition:opacity .3s ease,visibility .3s ease}
+#lightbox.show{visibility:visible;opacity:1;cursor:zoom-out}
+#lightbox img{max-width:90%;max-height:90%;border-radius:10px;transform:scale(.95);transition:transform .3s ease}
+#lightbox.show img{transform:scale(1)}

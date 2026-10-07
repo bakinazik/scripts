@@ -668,6 +668,7 @@ ${script.shots.length ? `
 
     ${renderFooter()}
 </main>
+${script.shots.length ? '<div id="lightbox" aria-hidden="true"><img src="" alt=""></div>' : ""}
 <script>
 const report = document.getElementById("report");
 const body = [
@@ -720,6 +721,18 @@ function show(name) {
     wrap.hidden = name !== "code";
 }
 tabs.forEach(tab => tab.addEventListener("click", () => show(tab.dataset.tab)));
+const lightbox = document.getElementById("lightbox");
+if (lightbox) {
+    const big = lightbox.querySelector("img");
+    const close = () => lightbox.classList.remove("show");
+    document.querySelectorAll(".shots a").forEach(link => link.addEventListener("click", event => {
+        event.preventDefault();
+        big.src = link.href;
+        lightbox.classList.add("show");
+    }));
+    lightbox.addEventListener("click", close);
+    addEventListener("keydown", event => { if (event.key === "Escape") close(); });
+}
 codeBox.querySelectorAll(".line").forEach((line, index) => line.id = "L" + (index + 1));
 function mark() {
     codeBox.querySelectorAll(".hl").forEach(line => line.classList.remove("hl"));

@@ -5,15 +5,11 @@
 <h1 align="center">Scripts</h1>
 
 <p align="center">
-  <strong>A collection of userscripts for customizing and improving the web.</strong>
+  <strong>A collection of userscripts and userstyles for customizing and improving the web.</strong>
 </p>
 
 <p align="center">
   <a href="https://bakinazik.github.io/scripts/"><img src="https://img.shields.io/badge/home%20page-website-ffffff?style=flat-square" alt="website"></a>&nbsp;&nbsp;<a href="https://buymeacoffee.com/bakinazik"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-support-orange.svg" alt="buy me a coffee"></a>
-</p>
-
-<p align="center">
-  <a href="https://bakinazik.github.io/scripts/"><img src="https://raw.githubusercontent.com/bakinazik/scripts/0778c0b521d771be511b6829769cc609316c02b0/generator/assets/screenshot.webp" alt="Scripts Screenshot"></a>
 </p>
 
 <details>

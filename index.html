@@ -9,7 +9,7 @@
 {{FLAGS}}
 {{THEME_INIT}}
 <style>
-:root,:root[data-theme=dark]{--bg:#0a0a0a;--primary:#282828;--secondary:#323232;--text:#a1a1a1;--muted:#bbb;--muted2:#eee;--border:#222;--accent:#fff;--max:1024px;--bar:3.5rem;--ease:cubic-bezier(.2,0,0,1);color-scheme:dark}
+:root,:root[data-theme=dark]{--bg:#0a0a0a;--primary:#282828;--secondary:#323232;--text:#a1a1a1;--muted:#bbb;--muted2:#eee;--border:#222;--accent:#58a6ff;--max:1024px;--bar:3.5rem;--ease:cubic-bezier(.2,0,0,1);color-scheme:dark}
 :root[data-theme=light]{--bg:#fff;--primary:#ddd;--secondary:#eee;--text:#363737;--muted:#777;--muted2:#444;--border:#ddd;--accent:#000;color-scheme:light}
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -145,7 +145,7 @@ main{
     border:1px solid transparent;
     border-radius:999px;
     outline:none;
-    background:color-mix(in srgb,var(--accent) 7%,transparent);
+    background:var(--border);
     color:var(--muted2);
     font:inherit;
     font-size:.85rem;

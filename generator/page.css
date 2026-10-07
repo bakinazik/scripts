@@ -82,3 +82,5 @@ body.page{--wrap:#58a6ff}
 #lightbox.show{visibility:visible;opacity:1;cursor:zoom-out}
 #lightbox img{max-width:90%;max-height:90%;border-radius:10px;transform:scale(.95);transition:transform .3s ease}
 #lightbox.show img{transform:scale(1)}
+
+.wrap{width:min(calc(100% - 2rem),var(--max));margin:auto}

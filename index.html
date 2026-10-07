@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Scripts</title>
-<meta name="description" content="A collection of userscripts for customizing and improving the web, by @bakinazik.">
+<meta name="description" content=" A collection of userscripts and userstyles for customizing and improving the web.">
 {{ICONS}}
 {{FLAGS}}
 {{THEME_INIT}}
 <style>
-:root,:root[data-theme=dark]{--bg:#0a0a0a;--primary:#282828;--secondary:#323232;--text:#a1a1a1;--muted:#bbb;--muted2:#eee;--border:#222;--accent:#58a6ff;--max:1024px;--bar:3.5rem;--ease:cubic-bezier(.2,0,0,1);color-scheme:dark}
+:root,:root[data-theme=dark]{--bg:#0a0a0a;--primary:#282828;--secondary:#323232;--text:#a1a1a1;--muted:#bbb;--muted2:#eee;--border:#222;--accent:#fff;--max:1024px;--bar:3.5rem;--ease:cubic-bezier(.2,0,0,1);color-scheme:dark}
 :root[data-theme=light]{--bg:#fff;--primary:#ddd;--secondary:#eee;--text:#363737;--muted:#777;--muted2:#444;--border:#ddd;--accent:#000;color-scheme:light}
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -211,13 +211,23 @@ main{
     height:16px;
 }
 
-.count{
+.second-header{
+    margin:1.25rem 0 0;
+    border-bottom:1px solid var(--border);
+}
+
+.second-header-inner{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    margin:1.25rem 0 0;
+    width:min(calc(100% - 2rem),var(--max));
+    margin:auto;
     color:var(--muted);
     font-size:.8rem;
+}
+
+.second-header+main{
+    padding-top:1rem;
 }
 
 .settings{
@@ -738,11 +748,11 @@ a.settings-item{
 }
 
 .tabs{display:flex;align-items:center;gap:.25rem}
-.count .tabs{margin-bottom:0}
-.count-tools{display:contents}
-.count .sort-trigger{display:none}
+.second-header .tabs{margin-bottom:0}
+.second-header-tools{display:contents}
+.second-header .sort-trigger{display:none}
 .sort-menu{display:contents}
-@media(max-width:600px){.count .tab{padding-inline:.55rem}.count .sort-trigger{display:inline-flex}.count #sort{position:relative}.count .sort-menu{position:absolute;top:calc(100% + .6rem);inset-inline-end:0;z-index:20;display:flex;flex-direction:column;gap:2px;min-width:9rem;padding:.5rem;border:1px solid var(--border);border-radius:.75rem;background:var(--bg);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(4px);transition:opacity .15s ease,transform .15s ease,visibility 0s linear .15s}.count #sort.is-open .sort-menu{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:opacity .15s ease,transform .15s ease,visibility 0s linear 0s}.count .sort-menu .tab{width:100%;margin:0;padding:.6rem;border-radius:.5rem;border-bottom:0;font-size:.85rem}.count .sort-menu .tab::before{display:none}.count .sort-menu .tab:hover,.count .sort-menu .tab.active{background:var(--secondary);color:var(--accent)}}
+@media(max-width:600px){.second-header .tab{padding-inline:.55rem}.second-header .sort-trigger{display:inline-flex}.second-header #sort{position:relative}.second-header .sort-menu{position:absolute;top:calc(100% + .6rem);inset-inline-end:0;z-index:20;display:flex;flex-direction:column;gap:2px;min-width:9rem;padding:.5rem;border:1px solid var(--border);border-radius:.75rem;background:var(--bg);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(4px);transition:opacity .15s ease,transform .15s ease,visibility 0s linear .15s}.second-header #sort.is-open .sort-menu{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:opacity .15s ease,transform .15s ease,visibility 0s linear 0s}.second-header .sort-menu .tab{width:100%;margin:0;padding:.6rem;border-radius:.5rem;border-bottom:0;font-size:.85rem}.second-header .sort-menu .tab::before{display:none}.second-header .sort-menu .tab:hover,.second-header .sort-menu .tab.active{background:var(--secondary);color:var(--accent)}}
 .script-meta small .kind{margin-inline-end:.4rem;padding:.05rem .35rem;border:1px solid var(--border);border-radius:4px;font-size:.65rem;font-weight:600;letter-spacing:.03em}
 .tab{position:relative}
 .tab::before{content:"";position:absolute;left:.75rem;right:.75rem;bottom:-1px;height:2px;border-radius:2px;background:var(--accent);transform:scaleX(0);transform-origin:center;opacity:.5;transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .25s}
@@ -843,9 +853,7 @@ select:focus-visible{
 <body>
 {{NAV}}
 
-<main>
-
-    <div class="count"><div class="count-tools"><div class="tabs" id="kind" role="tablist" aria-label="Type" data-i18n-aria-label="filter_aria">
+<div class="second-header"><div class="second-header-inner"><div class="second-header-tools"><div class="tabs" id="kind" role="tablist" aria-label="Type" data-i18n-aria-label="filter_aria">
         <button class="tab" type="button" role="tab" aria-selected="false" data-kind="all" aria-label="All" data-i18n-aria-label="filter_all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h6v6h-6z"></path><path d="M14 4h6v6h-6z"></path><path d="M4 14h6v6h-6z"></path><path d="M14 14h6v6h-6z"></path></svg><span class="tab-label" data-i18n="filter_all">All</span></button>
         <button class="tab" type="button" role="tab" aria-selected="false" data-kind="script" aria-label="Scripts" data-i18n-aria-label="filter_script"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8l-4 4l4 4"></path><path d="M17 8l4 4l-4 4"></path><path d="M14 4l-4 16"></path></svg><span class="tab-label" data-i18n="filter_script">Scripts</span></button>
         <button class="tab" type="button" role="tab" aria-selected="false" data-kind="style" aria-label="Styles" data-i18n-aria-label="filter_style"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25z"></path><path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path><path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path><path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path></svg><span class="tab-label" data-i18n="filter_style">Styles</span></button>
@@ -853,6 +861,8 @@ select:focus-visible{
         <button class="tab" type="button" role="tab" aria-selected="false" data-sort="new" aria-label="Newest" data-i18n-aria-label="sort_new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5.5a.5 .5 0 0 1 .5 -.5h4a.5 .5 0 0 1 .5 .5v4a.5 .5 0 0 1 -.5 .5h-4a.5 .5 0 0 1 -.5 -.5l0 -4"></path><path d="M5 14.5a.5 .5 0 0 1 .5 -.5h4a.5 .5 0 0 1 .5 .5v4a.5 .5 0 0 1 -.5 .5h-4a.5 .5 0 0 1 -.5 -.5l0 -4"></path><path d="M14 15l3 3l3 -3"></path><path d="M17 18v-12"></path></svg><span class="tab-label" data-i18n="sort_new">Newest</span></button>
         <button class="tab" type="button" role="tab" aria-selected="false" data-sort="old" aria-label="Oldest" data-i18n-aria-label="sort_old"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l7 0"></path><path d="M4 12l7 0"></path><path d="M4 18l9 0"></path><path d="M15 9l3 -3l3 3"></path><path d="M18 6l0 12"></path></svg><span class="tab-label" data-i18n="sort_old">Oldest</span></button></span>
     </div></div></div>
+
+<main>
 
     <section class="scripts masonry" id="scripts"></section>
     <script type="application/json" id="data">{{DATA}}</script>

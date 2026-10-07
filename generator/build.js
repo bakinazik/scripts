@@ -546,7 +546,7 @@ ${head({ title: `${author} - Userscripts`, description: `${count} by ${author}.`
 </head>
 <body>
 ${renderNav()}
-<main>
+<div class="wrap">
 
     <section class="profile-head">
         <span class="profile-avatar" aria-hidden="true">${esc([...author][0].toUpperCase())}</span>
@@ -559,7 +559,11 @@ ${renderNav()}
         </div>
     </section>
 
-    <div class="count"><span id="count" data-i18n="${countKey}"${varsAttr({ n: list.length })}>${count}</span>${tabs}</div>
+</div>
+
+<div class="second-header"><div class="second-header-inner"><span id="count" data-i18n="${countKey}"${varsAttr({ n: list.length })}>${count}</span>${tabs}</div></div>
+
+<main>
 
     <section class="scripts masonry" id="scripts">${list.map(script => renderCard(script)).join("")}</section>
 

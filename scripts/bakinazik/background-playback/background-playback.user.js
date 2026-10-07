@@ -4,8 +4,8 @@
 // @namespace    https://github.com/bakinazik/scripts
 // @version      1.0.0
 // @description  Keep media playing in background.
-// @updateURL    https://raw.githubusercontent.com/bakinazik/scripts/main/scripts/bakinazik/background-playback.user.js
-// @downloadURL  https://raw.githubusercontent.com/bakinazik/scripts/main/scripts/bakinazik/bbackground-playback.user.js
+// @updateURL    https://raw.githubusercontent.com/bakinazik/scripts/main/scripts/bakinazik/background-playback/background-playback.user.js
+// @downloadURL  https://raw.githubusercontent.com/bakinazik/scripts/main/scripts/bakinazik/background-playback/background-playback.user.js
 // @match        *://*/*
 // @run-at       document-start
 // @grant        none

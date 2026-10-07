@@ -76,3 +76,6 @@ body.page{--wrap:#58a6ff}
 .profile-avatar{display:flex;flex:none;align-items:center;justify-content:center;width:4rem;height:4rem;border:1px solid var(--border);border-radius:50%;background:var(--primary);color:var(--muted2);font-size:1.6rem;font-weight:600;line-height:1}
 .profile-info{display:flex;flex-direction:column;align-items:flex-start;gap:.5rem;min-width:0}
 .profile-info h1{margin:0;max-width:100%;overflow:hidden;color:var(--muted2);font-size:1.4rem;font-weight:600;letter-spacing:-.02em;line-height:1.2;text-overflow:ellipsis;white-space:nowrap}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,18rem),1fr));gap:.6rem}
+.shots a{display:block}
+.shots img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid var(--border);border-radius:10px;background:var(--border)}

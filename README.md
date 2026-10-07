@@ -33,9 +33,12 @@ Scripts is an open wiki for userscripts built on top of Git.
 Scripts are organized by the username of the original publisher:
 
 ```text
-scripts/<username>/<name>.user.js
-scripts/<username>/<name>.user.css
+scripts/<username>/<name>/<name>.user.js
+scripts/<username>/<name>/<name>.user.css
+scripts/<username>/<name>/*.png | *.jpg | *.jpeg | *.webp | *.gif | *.avif
 ```
+
+Each script or style lives in its own folder, and the file must be named after the folder. Any images in the same folder are detected automatically and shown as screenshots (up to two on the card, all of them on the detail page).
 
 This structure automatically creates dedicated pages:
 
@@ -61,19 +64,19 @@ Files placed directly inside `scripts/` root are ignored by the build system.
 Add your script under your username directory:
 
 ```text
-scripts/<your-username>/<name>.user.js
+scripts/<your-username>/<name>/<name>.user.js
 ```
 
 Ensure the metadata header points to the raw file:
 
 ```javascript
-// @updateURL    https://raw.githubusercontent.com/<repo>/main/scripts/<username>/<name>.user.js
-// @downloadURL  https://raw.githubusercontent.com/<repo>/main/scripts/<username>/<name>.user.js
+// @updateURL    https://raw.githubusercontent.com/<repo>/main/scripts/<username>/<name>/<name>.user.js
+// @downloadURL  https://raw.githubusercontent.com/<repo>/main/scripts/<username>/<name>/<name>.user.js
 ```
 
 Metadata should accurately describe the script's behavior and requested permissions.
 
-Userstyles use `scripts/<your-username>/<name>.user.css` with a `/* ==UserStyle== ... ==/UserStyle== */` header (`@name`, `@version`, `@description`, `@author`, `@updateURL`) and `@-moz-document domain(...)` rules, and are installed with [Stylus](https://add0n.com/stylus.html).
+Userstyles use `scripts/<your-username>/<name>/<name>.user.css` with a `/* ==UserStyle== ... ==/UserStyle== */` header (`@name`, `@version`, `@description`, `@author`, `@updateURL`) and `@-moz-document domain(...)` rules, and are installed with [Stylus](https://add0n.com/stylus.html).
 
 </details>
 

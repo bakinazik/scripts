@@ -2,8 +2,8 @@
 // @name         GitHub Repo File Downloader
 // @namespace    https://github.com/bakinazik/scripts
 // @version      1.1.0
-// @updateURL    https://raw.githubusercontent.com/bakinazik/scripts/main/scripts/bakinazik/github-repo-file-downloader.user.js
-// @downloadURL  https://raw.githubusercontent.com/bakinazik/scripts/main/scripts/bakinazik/github-repo-file-downloader.user.js
+// @updateURL    https://raw.githubusercontent.com/bakinazik/scripts/main/scripts/bakinazik/github-repo-file-downloader/github-repo-file-downloader.user.js
+// @downloadURL  https://raw.githubusercontent.com/bakinazik/scripts/main/scripts/bakinazik/github-repo-file-downloader/github-repo-file-downloader.user.js
 // @description  Allows you to download individual files directly from GitHub repository pages.
 // @author       bakinazik
 // @icon         https://github.githubassets.com/favicons/favicon-dark.svg

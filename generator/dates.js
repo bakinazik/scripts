@@ -7,6 +7,8 @@ const root = path.resolve(__dirname, "..");
 const scriptsDir = path.join(root, "scripts");
 const datesFile = path.join(__dirname, "dates.json");
 
+const IMAGE = /\.(webp|png|jpe?g|gif|avif)$/i;
+
 function gitDate(file, first) {
     try {
         const dates = execFileSync("git", ["log", "--follow", "--format=%cI", "--", file], { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] })
@@ -20,9 +22,23 @@ function listScripts() {
     const entries = [];
     for (const folder of fs.readdirSync(scriptsDir, { withFileTypes: true })) {
         if (!folder.isDirectory() || folder.name.startsWith(".")) continue;
-        const dir = path.join(scriptsDir, folder.name);
-        for (const file of fs.readdirSync(dir).filter(name => /\.user\.(js|css)$/.test(name)).sort()) {
-            entries.push({ user: folder.name, file, key: `${folder.name}/${file}`, absolute: path.join(dir, file) });
+        const userDir = path.join(scriptsDir, folder.name);
+        for (const item of fs.readdirSync(userDir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+            if (item.isFile() && /\.user\.(js|css)$/.test(item.name)) {
+                console.warn(`Skipped scripts/${folder.name}/${item.name}: move it into scripts/${folder.name}/<name>/<name>${item.name.slice(item.name.indexOf(".user."))}`);
+                continue;
+            }
+            if (!item.isDirectory() || item.name.startsWith(".")) continue;
+            const dir = path.join(userDir, item.name);
+            const names = fs.readdirSync(dir);
+            const files = names.filter(name => name === `${item.name}.user.js` || name === `${item.name}.user.css`);
+            const images = names.filter(name => IMAGE.test(name)).sort((a, b) => a.localeCompare(b, "en", { numeric: true }));
+            for (const stray of names.filter(name => /\.user\.(js|css)$/.test(name) && !files.includes(name))) {
+                console.warn(`Skipped scripts/${folder.name}/${item.name}/${stray}: the file must be named ${item.name}.user.js or ${item.name}.user.css`);
+            }
+            for (const file of files) {
+                entries.push({ user: folder.name, name: item.name, file, key: `${folder.name}/${item.name}/${file}`, absolute: path.join(dir, file), images: images.map(image => `${folder.name}/${item.name}/${image}`) });
+            }
         }
     }
     return entries.sort((a, b) => a.key.localeCompare(b.key));
@@ -46,8 +62,8 @@ function stampOf(previous, file) {
 function syncDates() {
     const ledger = readLedger();
     const stamps = {};
-    for (const { key, file, absolute } of listScripts()) {
-        stamps[key] = stampOf(ledger[key] || ledger[file], absolute);
+    for (const { user, key, file, absolute } of listScripts()) {
+        stamps[key] = stampOf(ledger[key] || ledger[`${user}/${file}`] || ledger[file], absolute);
     }
     const serialized = JSON.stringify(stamps, null, 2) + "\n";
     try {

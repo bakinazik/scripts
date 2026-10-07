@@ -153,16 +153,16 @@ function slugify(value) {
 
 function loadScripts() {
     const stamps = syncDates();
-    for (const file of fs.readdirSync(scriptsDir).filter(name => name.endsWith(".user.js"))) {
-        console.warn(`Skipped scripts/${file}: move it into scripts/<username>/${file}`);
+    for (const file of fs.readdirSync(scriptsDir).filter(name => /\.user\.(js|css)$/.test(name))) {
+        console.warn(`Skipped scripts/${file}: move it into scripts/<username>/<name>/${file}`);
     }
     const seen = new Set();
     return listScripts()
-        .map(({ user, file, key, absolute }) => {
+        .map(({ user, name: folder, file, key, absolute, images }) => {
             const source = fs.readFileSync(absolute, "utf8");
             const meta = file.endsWith(".user.css") ? parseStyleMetadata(source) : parseMetadata(source);
             const type = file.endsWith(".user.css") ? "style" : "script";
-            const slug = file.replace(/\.user\.(js|css)$/, "");
+            const slug = folder;
             const authorSlug = slugify(user);
             if (seen.has(`${authorSlug}/${slug}`)) throw new Error(`Duplicate script: ${key}`);
             seen.add(`${authorSlug}/${slug}`);
@@ -170,6 +170,7 @@ function loadScripts() {
             return {
                 type,
                 filename: file,
+                shots: images.map(image => `/scripts/${encodeURI(image)}`),
                 key,
                 slug,
                 authorSlug,
@@ -319,7 +320,9 @@ function renderCard(script) {
             </div>
 
             <p class="script-description">${esc(script.description)}</p>
-
+${script.shots.length ? `
+            <a class="script-shots" href="${esc(script.path)}" tabindex="-1" aria-hidden="true">${script.shots.slice(0, 2).map(src => `<img src="${esc(src)}" alt="" loading="lazy" decoding="async">`).join("")}</a>
+` : ""}
             <div class="script-footer">
                 ${renderDates(script)}
                 <a class="script-author" href="/u/${esc(script.authorSlug)}" title="${esc(script.author)}">
@@ -640,7 +643,9 @@ ${renderNav()}
         <p class="detail-description">${esc(script.description)}</p>
 
         ${actions(script)}
-
+${script.shots.length ? `
+        <div class="shots">${script.shots.map((src, index) => `<a href="${esc(src)}" target="_blank" rel="noopener"><img src="${esc(src)}" alt="${esc(script.name)} ${index + 1}" loading="lazy" decoding="async"></a>`).join("")}</div>
+` : ""}
         <div class="tabs" role="tablist">
             <button class="tab active" type="button" role="tab" aria-selected="true" data-tab="code" data-i18n="tab_code">${itext("tab_code")}</button>
             <button class="tab" type="button" role="tab" aria-selected="false" data-tab="details" data-i18n="tab_details">${itext("tab_details")}</button>
@@ -805,6 +810,10 @@ async function main() {
     for (const script of scripts) {
         fs.mkdirSync(path.join(outDir, "scripts", path.dirname(script.key)), { recursive: true });
         fs.copyFileSync(path.join(scriptsDir, script.key), path.join(outDir, "scripts", script.key));
+        for (const shot of script.shots) {
+            const relative = decodeURI(shot).replace(/^\/scripts\//, "");
+            fs.copyFileSync(path.join(scriptsDir, relative), path.join(outDir, "scripts", relative));
+        }
         const source = fs.readFileSync(path.join(scriptsDir, script.key), "utf8");
         const code = await codeToHtml(source, {
             lang: script.type === "style" ? "css" : "javascript",

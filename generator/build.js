@@ -335,8 +335,8 @@ function seoMeta({ title, description, route }) {
 const DESCRIPTION = "A collection of userscripts for customizing and improving the web.";
 
 const MENU = [
-    { key: "nav_saved", href: "/saved" },
-    { key: "nav_about", href: "/about" }
+    { key: "nav_saved", href: "/saved", icon: "heart" },
+    { key: "nav_about", href: "/about", icon: "info" }
 ];
 
 const THEME_INIT = '<script>(()=>{const r=document.documentElement,t=localStorage.getItem("theme");r.dataset.theme=t==="dark"||t==="light"?t:matchMedia("(prefers-color-scheme:light)").matches?"light":"dark"})()</script>';
@@ -346,6 +346,8 @@ const NAV_JS = '(()=>{const bar=document.getElementById("bar");const edge=()=>ba
 const SAVED_JS = '(()=>{const read=()=>{try{const v=JSON.parse(localStorage.getItem("saved"));return Array.isArray(v)?v:[]}catch{return[]}};const mark=(button,on)=>{button.classList.toggle("on",on);button.setAttribute("aria-pressed",on)};const saved={has:key=>read().includes(key),apply(root){const list=read();root.querySelectorAll(".script-save").forEach(button=>mark(button,list.includes(button.dataset.key)))},toggle(key){const list=read();const next=list.includes(key)?list.filter(item=>item!==key):[...list,key];try{localStorage.setItem("saved",JSON.stringify(next))}catch{}return next.includes(key)}};window.saved=saved;document.addEventListener("click",event=>{const button=event.target.closest(".script-save");if(!button)return;mark(button,saved.toggle(button.dataset.key));document.dispatchEvent(new CustomEvent("saved-change"))});document.addEventListener("DOMContentLoaded",()=>saved.apply(document))})();';
 
 const ICONS = {
+    heart: '<path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/>',
+    info: '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M12 9h.01"/><path d="M11 12h1v4h1"/>',
     dots: '<path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>',
     back: '<path d="M5 12l14 0"/><path d="M5 12l6 6"/><path d="M5 12l6 -6"/>',
     chevron: '<path d="M9 6l6 6l-6 6"/>',
@@ -370,10 +372,15 @@ const settingsSection = (id, key, options) => `<div class="settings-section" id=
 
 const choice = (key, value) => inode("button", key, null, `type="button" data-value="${value}"`);
 
-const SETTINGS_MENU = `<div class="settings" id="settings">
+const panelLink = (item, current) => `<a class="settings-item panel-link" href="${esc(item.href)}"${item.href === current ? ' aria-current="page"' : ""}${item.external ? ' target="_blank" rel="noopener"' : ""}>
+                        <span class="settings-item-label">${svg(item.icon)}${inode("span", item.key)}</span>
+                    </a>`;
+
+const settingsMenu = current => `<div class="settings" id="settings">
             <button class="bar-icon" id="settings-trigger" type="button" ${iattr("aria-label", "settings_menu_aria")} aria-haspopup="true" aria-expanded="false">${svg("dots", 17)}</button>
-            <div class="settings-panel" id="settings-panel">
+            <div class="panel" id="panel">
                 <div class="settings-list">
+                    ${MENU.map(item => panelLink(item, current)).join("\n                    ")}
                     ${settingsItem("theme-section", "palette", "theme_label")}
                     ${settingsItem("lang-section", "language", "language_label")}
                 </div>
@@ -413,7 +420,7 @@ function renderNav(current = "") {
         </div>
         <div class="bar-row">
             ${SEARCH_FIELD}
-            ${SETTINGS_MENU}
+            ${settingsMenu(current)}
         </div>
     </nav>
 </header>
@@ -667,7 +674,7 @@ document.getElementById("share").addEventListener("click", async event => {
 const codeBox = document.querySelector(".code");
 const wrap = document.getElementById("wrap");
 const tabs = document.querySelectorAll(".tab");
-const panels = document.querySelectorAll(".panel");
+const panels = document.querySelectorAll(".detail .panel");
 wrap.addEventListener("click", () => {
     wrap.setAttribute("aria-pressed", codeBox.classList.toggle("wrap"));
 });

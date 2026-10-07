@@ -224,7 +224,7 @@ main{
     position:relative;
 }
 
-.settings-panel{
+.settings .panel{
     position:absolute;
     top:calc(100% + .6rem);
     inset-inline-end:0;
@@ -244,7 +244,7 @@ main{
     transition:opacity .15s ease,transform .15s ease,visibility 0s linear .15s;
 }
 
-.settings.is-open .settings-panel{
+.settings.is-open .panel{
     opacity:1;
     visibility:visible;
     pointer-events:auto;
@@ -260,7 +260,7 @@ main{
     overflow-y:auto;
 }
 
-.settings-panel.has-section .settings-list{
+.settings .panel.has-section .settings-list{
     display:none;
 }
 
@@ -295,6 +295,18 @@ main{
 .settings-item{
     justify-content:space-between;
     padding:.6rem;
+}
+
+a.settings-item{
+    text-decoration:none;
+}
+
+.settings-item[aria-current=page]{
+    color:var(--accent);
+}
+
+.panel-link{
+    display:none;
 }
 
 .settings-item svg{
@@ -729,29 +741,38 @@ select:focus-visible{
     }
 
     .bar .bar-inner{
-        flex-direction:column;
-        align-items:stretch;
+        flex-wrap:wrap;
         gap:0;
         height:auto;
         padding-bottom:.7rem;
     }
 
-    .bar .bar-row:first-child{
-        justify-content:space-between;
-        height:3.25rem;
+    .bar .bar-row{
+        display:contents;
     }
 
     .logo{
+        order:1;
         height:3.25rem;
     }
 
-    .bar .bar-row:last-child{
-        gap:.5rem;
+    .settings{
+        order:2;
+        margin-inline-start:auto;
     }
 
     .bar .bar-field{
-        flex:1;
-        width:auto;
+        order:3;
+        flex:0 0 100%;
+        width:100%;
+    }
+
+    .bar-link{
+        display:none;
+    }
+
+    .panel-link{
+        display:flex;
     }
 }
 </style>

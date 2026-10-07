@@ -113,7 +113,7 @@
 
     const menu = document.getElementById("settings");
     const trigger = document.getElementById("settings-trigger");
-    const panel = document.getElementById("settings-panel");
+    const panel = document.getElementById("panel");
     const langOptions = document.getElementById("lang-options");
 
     const showRoot = () => {

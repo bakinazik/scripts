@@ -1,0 +1,27 @@
+{
+  "bakinazik/anti-video-pause.user.js": {
+    "added": "2026-10-04T19:44:55+03:00",
+    "updated": "2026-10-04T17:09:07.627Z",
+    "hash": "ad2508df4e1c4e7d3d5e3bcd8351db98b5dd049d4d988cb53c4fc0f246c82c1a"
+  },
+  "bakinazik/background-playback.user.js": {
+    "added": "2026-10-04T20:19:19+03:00",
+    "updated": "2026-10-04T20:19:19+03:00",
+    "hash": "579599f204f2a9629eb31244ecc84f682ae3ad006c142cf7e491940eec5c9a75"
+  },
+  "bakinazik/github-repo-age.user.js": {
+    "added": "2026-10-04T14:48:55+03:00",
+    "updated": "2026-10-04T15:17:57+03:00",
+    "hash": "ccab4acbe1589c8673c246ef2f838ae2a492e744778ca390bd34baa832671e05"
+  },
+  "bakinazik/github-repo-file-downloader.user.js": {
+    "added": "2026-10-04T14:48:55+03:00",
+    "updated": "2026-10-04T15:17:57+03:00",
+    "hash": "385c3e4f4e115591d9da72763fb74d30cd0fd6281292775d8e61191cca67dda0"
+  },
+  "bakinazik/github-repo-subfolder-downloader.user.js": {
+    "added": "2026-10-04T14:48:55+03:00",
+    "updated": "2026-10-04T15:17:57+03:00",
+    "hash": "285210b20c235b561500031bdfc9f1e591184e1f6fdbb7787cc1da9db64e2ea1"
+  }
+}

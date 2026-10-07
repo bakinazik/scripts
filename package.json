@@ -1,0 +1,16 @@
+{
+  "name": "userscripts",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Baki",
+  "scripts": {
+    "build": "node generator/build.js"
+  },
+  "userscripts": {
+    "repo": "bakinazik/scripts",
+    "branch": "main"
+  },
+  "dependencies": {
+    "shiki": "^3.0.0"
+  }
+}

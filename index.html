@@ -580,13 +580,17 @@ a.settings-item{
     transition:color .3s ease;
 }
 
-.script-save:active {
-    animation: button-jump 1s ease;
+.script-save:active{
+    animation:button-jump .2s ease;
 }
 
-@keyframes button-jump {
-    50% {
-        transform: scale(1.50);
+@keyframes button-jump{
+    0%,100%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.5);
     }
 }
 

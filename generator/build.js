@@ -580,7 +580,8 @@ const observer = new ResizeObserver(entries => entries.forEach(entry => span(ent
 const items = JSON.parse(document.getElementById("data").textContent);
 const cards = [...list.children].map((node, index) => ({ node, ...items[index] }));
 const sort = document.getElementById("sort");
-const sortButtons = [...sort.querySelectorAll("button")];
+const sortButtons = [...sort.querySelectorAll("button[data-sort]")];
+const sortTrigger = sort.querySelector(".sort-trigger");
 
 const sorters = {
     new: (a, b) => b.added - a.added || a.name.localeCompare(b.name, "tr"),
@@ -604,9 +605,30 @@ function render() {
     list.append(...cards.map(card => card.node));
 }
 
+const closeSort = () => {
+    sort.classList.remove("is-open");
+    sortTrigger.setAttribute("aria-expanded", "false");
+};
+
+sortTrigger.addEventListener("click", () => {
+    const open = !sort.classList.contains("is-open");
+    sort.classList.toggle("is-open", open);
+    sortTrigger.setAttribute("aria-expanded", String(open));
+});
+
+document.addEventListener("click", event => {
+    if (!sort.contains(event.target)) closeSort();
+});
+
+addEventListener("keydown", event => {
+    if (event.key === "Escape") closeSort();
+});
+
 sort.addEventListener("click", event => {
-    const button = event.target.closest("button");
-    if (!button || button.dataset.sort === sortKey) return;
+    const button = event.target.closest("button[data-sort]");
+    if (!button) return;
+    closeSort();
+    if (button.dataset.sort === sortKey) return;
     setSort(button.dataset.sort);
     render();
 });

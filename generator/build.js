@@ -88,6 +88,29 @@ const esc = value => String(value ?? "")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 
+function parseStyleMetadata(source) {
+    const meta = Object.fromEntries(MULTI.map(key => [key, []]));
+    const block = source.match(/\/\*\s*==UserStyle==([\s\S]*?)==\/UserStyle==\s*\*\//);
+    if (block) {
+        for (const line of block[1].split(/\r?\n/)) {
+            const found = line.match(/^\s*@([\w:-]+)\s+(.*?)\s*$/);
+            if (found && !(found[1] in meta)) meta[found[1]] = found[2];
+        }
+    }
+    const rule = /@-moz-document\s+([^{]+)\{/g;
+    for (let rules; (rules = rule.exec(source));) {
+        const item = /(domain|url-prefix|url|regexp)\(\s*(?:"([^"]*)"|'([^']*)'|([^)\s]*))\s*\)/g;
+        for (let found; (found = item.exec(rules[1]));) {
+            const kind = found[1];
+            const value = found[2] ?? found[3] ?? found[4] ?? "";
+            if (!value) continue;
+            meta.match.push(kind === "domain" ? `*://*.${value}/*` : kind === "url-prefix" ? `${value}*` : kind === "regexp" ? `/${value}/` : value);
+        }
+    }
+    if (!meta.match.length) meta.match.push("*://*/*");
+    return meta;
+}
+
 function parseMetadata(source) {
     const meta = Object.fromEntries(MULTI.map(key => [key, []]));
     const block = source.match(/\/\/\s*==UserScript==([\s\S]*?)\/\/\s*==\/UserScript==/);
@@ -136,13 +159,16 @@ function loadScripts() {
     const seen = new Set();
     return listScripts()
         .map(({ user, file, key, absolute }) => {
-            const meta = parseMetadata(fs.readFileSync(absolute, "utf8"));
-            const slug = file.replace(/\.user\.js$/, "");
+            const source = fs.readFileSync(absolute, "utf8");
+            const meta = file.endsWith(".user.css") ? parseStyleMetadata(source) : parseMetadata(source);
+            const type = file.endsWith(".user.css") ? "style" : "script";
+            const slug = file.replace(/\.user\.(js|css)$/, "");
             const authorSlug = slugify(user);
             if (seen.has(`${authorSlug}/${slug}`)) throw new Error(`Duplicate script: ${key}`);
             seen.add(`${authorSlug}/${slug}`);
             const stamp = stamps[key];
             return {
+                type,
                 filename: file,
                 key,
                 slug,
@@ -259,6 +285,7 @@ function renderDates(script) {
 function renderChips(script) {
     return `<div class="chips">
             <a class="chip chip-author" href="/u/${esc(script.authorSlug)}"><i>${esc(script.author.charAt(0).toUpperCase())}</i>${esc(script.author)}</a>
+            ${script.type === "style" ? '<span class="chip">CSS</span>' : ""}
             <span class="chip">v${esc(script.version)}</span>
             <span class="chip">${globeIcon}${esc(script.host)}</span>
             <span class="chip" ${iattr("title", "created")}>${calendarIcon}<time datetime="${esc(day(script.added))}" data-i18n-date="${esc(script.added)}">${shortDate(script.added)}</time></span>
@@ -269,18 +296,18 @@ function renderChips(script) {
 function renderCard(script) {
     const search = [
         script.name, script.filename, script.host, script.description, script.author, script.version,
-        ...script.match, ...script.include
+        ...script.match, ...script.include, script.type === "style" ? "style css stylus" : "script userscript"
     ].join(" ").toLowerCase();
 
     return `
-        <article class="script" data-search="${esc(search)}">
+        <article class="script" data-type="${script.type}" data-search="${esc(search)}">
             <div class="script-header">
                 <div class="script-info">
                     <div class="script-icon">${icon(script)}</div>
 
                     <div class="script-meta">
                         <a class="script-title" href="${esc(script.path)}">${esc(script.name)}</a>
-                        <small>${esc(script.host)}</small>
+                        <small>${script.type === "style" ? '<b class="kind">CSS</b>' : ""}${esc(script.host)}</small>
                     </div>
                 </div>
 
@@ -472,7 +499,7 @@ function renderDetails(script, scripts) {
     return [
         block("detail_runs_on", rows([...script.match, ...script.include], "detail_no_match")),
         script.exclude.length ? block("detail_excluded", rows(script.exclude)) : "",
-        block("detail_permissions", rows(grants, "detail_no_permissions", grantNote)),
+        script.type === "style" ? "" : block("detail_permissions", rows(grants, "detail_no_permissions", grantNote)),
         block("detail_info", `<dl class="facts">
                 ${inode("dt", "detail_version")}<dd>${esc(script.version || "-")}</dd>
                 ${inode("dt", "detail_updated")}<dd>${esc(day(script.updated))}</dd>
@@ -718,11 +745,12 @@ async function main() {
     const template = fs.readFileSync(path.join(root, "index.html"), "utf8");
     const items = scripts.map(script => ({
         key: script.key,
+        type: script.type,
         name: script.name,
         added: Date.parse(script.added),
         search: [
             script.name, script.filename, script.host, script.description, script.author, script.version,
-            ...script.match, ...script.include
+            ...script.match, ...script.include, script.type === "style" ? "style css stylus" : "script userscript"
         ].join(" ").toLowerCase(),
         html: renderCard(script)
     }));
@@ -779,7 +807,7 @@ async function main() {
         fs.copyFileSync(path.join(scriptsDir, script.key), path.join(outDir, "scripts", script.key));
         const source = fs.readFileSync(path.join(scriptsDir, script.key), "utf8");
         const code = await codeToHtml(source, {
-            lang: "javascript",
+            lang: script.type === "style" ? "css" : "javascript",
             themes: { light: "github-light", dark: "github-dark" },
             defaultColor: false
         });
@@ -788,7 +816,7 @@ async function main() {
         writeHtml(path.join(pageDir, "index.html"), renderPage(script, code, css, scripts));
     }
 
-    const tabs = template.match(/<div class="tabs"[\s\S]*?<\/div>/)[0];
+    const tabs = template.match(/<div class="tabs" id="sort"[\s\S]*?<\/div>/)[0];
     const authors = new Map();
     for (const script of scripts) {
         if (!authors.has(script.authorSlug)) authors.set(script.authorSlug, { name: script.author, list: [] });

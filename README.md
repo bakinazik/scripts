@@ -34,6 +34,7 @@ Scripts are organized by the username of the original publisher:
 
 ```text
 scripts/<username>/<name>.user.js
+scripts/<username>/<name>.user.css
 ```
 
 This structure automatically creates dedicated pages:
@@ -71,6 +72,8 @@ Ensure the metadata header points to the raw file:
 ```
 
 Metadata should accurately describe the script's behavior and requested permissions.
+
+Userstyles use `scripts/<your-username>/<name>.user.css` with a `/* ==UserStyle== ... ==/UserStyle== */` header (`@name`, `@version`, `@description`, `@author`, `@updateURL`) and `@-moz-document domain(...)` rules, and are installed with [Stylus](https://add0n.com/stylus.html).
 
 </details>
 

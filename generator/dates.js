@@ -21,7 +21,7 @@ function listScripts() {
     for (const folder of fs.readdirSync(scriptsDir, { withFileTypes: true })) {
         if (!folder.isDirectory() || folder.name.startsWith(".")) continue;
         const dir = path.join(scriptsDir, folder.name);
-        for (const file of fs.readdirSync(dir).filter(name => name.endsWith(".user.js")).sort()) {
+        for (const file of fs.readdirSync(dir).filter(name => /\.user\.(js|css)$/.test(name)).sort()) {
             entries.push({ user: folder.name, file, key: `${folder.name}/${file}`, absolute: path.join(dir, file) });
         }
     }

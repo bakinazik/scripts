@@ -697,6 +697,9 @@ a.settings-item{
 
 .tabs{display:flex;align-items:center;gap:.25rem}
 .count .tabs{margin-bottom:0}
+.count-tools{display:flex;align-items:center;gap:1rem}
+.script-meta small .kind{margin-inline-end:.4rem;padding:.05rem .35rem;border:1px solid var(--border);border-radius:4px;font-size:.65rem;font-weight:600;letter-spacing:.03em}
+@media(max-width:600px){.count-tools{gap:.25rem}}
 .tab{position:relative}
 .tab::before{content:"";position:absolute;left:.75rem;right:.75rem;bottom:-1px;height:2px;border-radius:2px;background:var(--accent);transform:scaleX(0);transform-origin:center;opacity:.5;transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .25s}
 .tab:hover::before{transform:scaleX(.4)}
@@ -798,10 +801,14 @@ select:focus-visible{
 
 <main>
 
-    <div class="count"><span id="count" aria-live="polite"></span><div class="tabs" id="sort" role="tablist" aria-label="Sort scripts" data-i18n-aria-label="sort_aria">
+    <div class="count"><span id="count" aria-live="polite"></span><div class="count-tools"><div class="tabs" id="kind" role="tablist" aria-label="Type" data-i18n-aria-label="filter_aria">
+        <button class="tab" type="button" role="tab" aria-selected="false" data-kind="all" data-i18n="filter_all">All</button>
+        <button class="tab" type="button" role="tab" aria-selected="false" data-kind="script" data-i18n="filter_script">Scripts</button>
+        <button class="tab" type="button" role="tab" aria-selected="false" data-kind="style" data-i18n="filter_style">Styles</button>
+    </div><div class="tabs" id="sort" role="tablist" aria-label="Sort scripts" data-i18n-aria-label="sort_aria">
         <button class="tab" type="button" role="tab" aria-selected="false" data-sort="new" aria-label="Newest" data-i18n-aria-label="sort_new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5.5a.5 .5 0 0 1 .5 -.5h4a.5 .5 0 0 1 .5 .5v4a.5 .5 0 0 1 -.5 .5h-4a.5 .5 0 0 1 -.5 -.5l0 -4"></path><path d="M5 14.5a.5 .5 0 0 1 .5 -.5h4a.5 .5 0 0 1 .5 .5v4a.5 .5 0 0 1 -.5 .5h-4a.5 .5 0 0 1 -.5 -.5l0 -4"></path><path d="M14 15l3 3l3 -3"></path><path d="M17 18v-12"></path></svg><span class="tab-label" data-i18n="sort_new">Newest</span></button>
         <button class="tab" type="button" role="tab" aria-selected="false" data-sort="old" aria-label="Oldest" data-i18n-aria-label="sort_old"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l7 0"></path><path d="M4 12l7 0"></path><path d="M4 18l9 0"></path><path d="M15 9l3 -3l3 3"></path><path d="M18 6l0 12"></path></svg><span class="tab-label" data-i18n="sort_old">Oldest</span></button>
-    </div></div>
+    </div></div></div>
 
     <section class="scripts masonry" id="scripts"></section>
     <script type="application/json" id="data">{{DATA}}</script>
@@ -822,6 +829,8 @@ const empty = document.getElementById("empty");
 const count = document.getElementById("count");
 const sort = document.getElementById("sort");
 const sortButtons = [...sort.querySelectorAll("button")];
+const kind = document.getElementById("kind");
+const kindButtons = [...kind.querySelectorAll("button")];
 const items = JSON.parse(document.getElementById("data").textContent);
 const showCount = n => {
     const key = n === 1 ? "count_one" : "count_other";
@@ -842,6 +851,19 @@ const params = new URLSearchParams(location.search);
 search.value = searching ? params.get("q") || "" : "";
 const stored = (() => { try { return localStorage.getItem("sort"); } catch { return null; } })();
 let sortKey = [stored].find(value => value in sorters) || "new";
+
+const storedKind = (() => { try { return localStorage.getItem("kind"); } catch { return null; } })();
+let kindKey = ["all", "script", "style"].includes(storedKind) ? storedKind : "all";
+
+function setKind(key) {
+    kindKey = key;
+    try { localStorage.setItem("kind", key); } catch {}
+    kindButtons.forEach(button => {
+        const on = button.dataset.kind === key;
+        button.classList.toggle("active", on);
+        button.setAttribute("aria-selected", on);
+    });
+}
 
 function setSort(key) {
     sortKey = key;
@@ -877,7 +899,7 @@ function fill() {
 
 function render() {
     const value = searching ? search.value.toLowerCase().trim() : "";
-    filtered = items.filter(item => item.search.includes(value) && (!savedView || saved.has(item.key))).sort(sorters[sortKey]);
+    filtered = items.filter(item => item.search.includes(value) && (kindKey === "all" || item.type === kindKey) && (!savedView || saved.has(item.key))).sort(sorters[sortKey]);
     observer.disconnect();
     list.innerHTML = "";
     shown = 0;
@@ -907,6 +929,13 @@ sort.addEventListener("click", event => {
     render();
 });
 
+kind.addEventListener("click", event => {
+    const button = event.target.closest("button");
+    if (!button || button.dataset.kind === kindKey) return;
+    setKind(button.dataset.kind);
+    render();
+});
+
 if (savedView) {
     empty.setAttribute("data-i18n", "saved_empty");
     empty.textContent = i18n.t("saved_empty");
@@ -921,6 +950,7 @@ if (view === "home") document.getElementById("logo").addEventListener("click", e
 window.addEventListener("scroll", onScrollOrResize, { passive: true });
 window.addEventListener("resize", onScrollOrResize, { passive: true });
 
+setKind(kindKey);
 setSort(sortKey);
 render();
 </script>

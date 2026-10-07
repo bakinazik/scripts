@@ -284,7 +284,11 @@ function renderCard(script) {
                     </div>
                 </div>
 
-                <span class="script-version">v${esc(script.version)}</span>
+                <button class="script-save" type="button" data-key="${esc(script.key)}" aria-pressed="false" ${iattr("aria-label", "save_aria")}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
+                    </svg>
+                </button>
             </div>
 
             <p class="script-description">${esc(script.description)}</p>
@@ -331,12 +335,15 @@ function seoMeta({ title, description, route }) {
 const DESCRIPTION = "A collection of userscripts for customizing and improving the web.";
 
 const MENU = [
+    { key: "nav_saved", href: "/saved" },
     { key: "nav_about", href: "/about" }
 ];
 
 const THEME_INIT = '<script>(()=>{const r=document.documentElement,t=localStorage.getItem("theme");r.dataset.theme=t==="dark"||t==="light"?t:matchMedia("(prefers-color-scheme:light)").matches?"light":"dark"})()</script>';
 
 const NAV_JS = '(()=>{const bar=document.getElementById("bar");const edge=()=>bar.classList.toggle("scrolled",scrollY>4);addEventListener("scroll",edge,{passive:true});edge();const field=document.getElementById("search");const clear=document.getElementById("clear");const sync=()=>clear.hidden=!field.value;const wipe=()=>{field.value="";sync();field.dispatchEvent(new Event("input"));field.focus()};field.addEventListener("input",sync);clear.addEventListener("click",wipe);addEventListener("keydown",event=>{if(event.key==="Escape"&&document.activeElement===field&&field.value)return wipe();const typing=/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);if(event.key!=="/"||typing||event.metaKey||event.ctrlKey||event.altKey)return;event.preventDefault();field.focus()});})();';
+
+const SAVED_JS = '(()=>{const read=()=>{try{const v=JSON.parse(localStorage.getItem("saved"));return Array.isArray(v)?v:[]}catch{return[]}};const mark=(button,on)=>{button.classList.toggle("on",on);button.setAttribute("aria-pressed",on)};const saved={has:key=>read().includes(key),apply(root){const list=read();root.querySelectorAll(".script-save").forEach(button=>mark(button,list.includes(button.dataset.key)))},toggle(key){const list=read();const next=list.includes(key)?list.filter(item=>item!==key):[...list,key];try{localStorage.setItem("saved",JSON.stringify(next))}catch{}return next.includes(key)}};window.saved=saved;document.addEventListener("click",event=>{const button=event.target.closest(".script-save");if(!button)return;mark(button,saved.toggle(button.dataset.key));document.dispatchEvent(new CustomEvent("saved-change"))});document.addEventListener("DOMContentLoaded",()=>saved.apply(document))})();';
 
 const ICONS = {
     dots: '<path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>',
@@ -410,7 +417,7 @@ function renderNav(current = "") {
         </div>
     </nav>
 </header>
-<script>${NAV_JS}</script>
+<script>${NAV_JS}${SAVED_JS}</script>
 ${I18N_SCRIPT}`;
 }
 
@@ -703,6 +710,7 @@ async function main() {
     const scripts = loadScripts();
     const template = fs.readFileSync(path.join(root, "index.html"), "utf8");
     const items = scripts.map(script => ({
+        key: script.key,
         name: script.name,
         added: Date.parse(script.added),
         search: [
@@ -712,15 +720,19 @@ async function main() {
         html: renderCard(script)
     }));
     const data = JSON.stringify(items).replace(/</g, "\\u003c");
-    const fromTemplate = view => template.replace("{{ICONS}}", () => `${seoMeta({ title: "Scripts", description: DESCRIPTION, route: "/" })}\n${ICON_LINKS}`).replace("{{FLAGS}}", () => FLAGS_LINK).replace("{{THEME_INIT}}", () => THEME_INIT).replace("{{NAV}}", () => renderNav()).replace("{{FOOTER}}", () => renderFooter()).replace("{{DATA}}", () => data).replace("{{VIEW}}", view);
+    const fromTemplate = view => template.replace("{{ICONS}}", () => `${seoMeta({ title: "Scripts", description: DESCRIPTION, route: "/" })}\n${ICON_LINKS}`).replace("{{FLAGS}}", () => FLAGS_LINK).replace("{{THEME_INIT}}", () => THEME_INIT).replace("{{NAV}}", () => renderNav(view === "saved" ? "/saved" : "")).replace("{{FOOTER}}", () => renderFooter()).replace("{{DATA}}", () => data).replace("{{VIEW}}", view);
     const html = fromTemplate("home");
     const searchHtml = fromTemplate("search").replace("<title>Scripts</title>", () => `<title data-i18n="search_title">${itext("search_title")}</title>\n<meta name="robots" content="noindex">`);
+
+    const savedHtml = fromTemplate("saved").replace("<title>Scripts</title>", () => `<title data-i18n="saved_title">${itext("saved_title")}</title>\n<meta name="robots" content="noindex">`);
 
     fs.rmSync(outDir, { recursive: true, force: true });
     fs.mkdirSync(outDir, { recursive: true });
     writeHtml(path.join(outDir, "index.html"), html);
     fs.mkdirSync(path.join(outDir, "search"));
     writeHtml(path.join(outDir, "search", "index.html"), searchHtml);
+    fs.mkdirSync(path.join(outDir, "saved"));
+    writeHtml(path.join(outDir, "saved", "index.html"), savedHtml);
     fs.writeFileSync(path.join(outDir, "scripts.json"), JSON.stringify(scripts, null, 2));
     fs.mkdirSync(path.join(outDir, "scripts"));
     const css = template.match(/<style>([\s\S]*?)<\/style>/)[1] + fs.readFileSync(path.join(__dirname, "page.css"), "utf8");

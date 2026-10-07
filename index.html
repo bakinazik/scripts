@@ -558,13 +558,33 @@ main{
     display:block;
 }
 
-.script-version{
+.script-save{
+    position:relative;
+    z-index:1;
+    display:flex;
     flex-shrink:0;
-    padding:.1rem .55rem;
-    border:1px solid var(--border);
-    border-radius:999px;
+    margin:-.4rem -.4rem -.4rem 0;
+    padding:.4rem;
+    border:0;
+    background:none;
     color:var(--muted);
-    font-size:.72rem;
+    cursor:pointer;
+    transition:color .2s ease;
+}
+
+.script-save:hover,
+.script-save.on{
+    color:var(--accent);
+}
+
+.script-save svg{
+    width:18px;
+    height:18px;
+    transition:fill .2s ease;
+}
+
+.script-save.on svg{
+    fill:currentColor;
 }
 
 .script-footer{
@@ -755,7 +775,9 @@ select:focus-visible{
 </main>
 
 <script>
-const searching = "{{VIEW}}" === "search";
+const view = "{{VIEW}}";
+const searching = view === "search";
+const savedView = view === "saved";
 const search = document.getElementById("search");
 const clear = document.getElementById("clear");
 const list = document.getElementById("scripts");
@@ -805,6 +827,7 @@ function place(html) {
     list.insertAdjacentHTML("beforeend", html);
     const card = list.lastElementChild;
     i18n.apply(card);
+    saved.apply(card);
     span(card);
     observer.observe(card);
 }
@@ -817,7 +840,7 @@ function fill() {
 
 function render() {
     const value = searching ? search.value.toLowerCase().trim() : "";
-    filtered = items.filter(item => item.search.includes(value)).sort(sorters[sortKey]);
+    filtered = items.filter(item => item.search.includes(value) && (!savedView || saved.has(item.key))).sort(sorters[sortKey]);
     observer.disconnect();
     list.innerHTML = "";
     shown = 0;
@@ -846,6 +869,12 @@ sort.addEventListener("click", event => {
     setSort(button.dataset.sort);
     render();
 });
+
+if (savedView) {
+    empty.setAttribute("data-i18n", "saved_empty");
+    empty.textContent = i18n.t("saved_empty");
+    document.addEventListener("saved-change", render);
+}
 
 if (!searching) document.getElementById("logo").addEventListener("click", event => {
     event.preventDefault();

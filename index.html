@@ -742,12 +742,9 @@ a.settings-item{
 .count-tools{display:contents}
 .count .sort-trigger{display:none}
 .sort-menu{display:contents}
-@media(max-width:600px){.count .tab{padding-inline:.55rem}.count .sort-trigger{display:inline-flex}.count #sort{position:relative}.count .sort-menu{position:absolute;top:calc(100% + .6rem);inset-inline-end:0;z-index:20;display:flex;flex-direction:column;gap:2px;min-width:9rem;padding:.5rem;border:1px solid var(--border);border-radius:.75rem;background:var(--bg);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(4px);transition:opacity .15s ease,transform .15s ease,visibility 0s linear .15s}.count #sort.is-open .sort-menu{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:opacity .15s ease,transform .15s ease,visibility 0s linear 0s}.count .sort-menu .tab{width:100%;margin:0;padding:.6rem;border-radius:.5rem;border-bottom:0;font-size:.85rem}.count .sort-menu .tab::before{display:none}.count .sort-menu .tab:hover,.count .sort-menu .tab.active{background:var(--secondary);color:var(--accent)}}
+@media(max-width:600px){.count .tab{padding-inline:.55rem}.count .sort-trigger{display:inline-flex}.count #sort{position:relative}.count .sort-menu{position:absolute;top:calc(100% + .6rem);inset-inline-end:0;z-index:20;display:flex;flex-direction:column;gap:2px;min-width:9rem;padding:.5rem;border:1px solid var(--border);border-radius:.75rem;background:var(--bg);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(4px);transition:opacity .15s ease,transform .15s ease,visibility 0s linear .15s}.count #sort.is-open .sort-menu{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:opacity .15s ease,transform .15s ease,visibility 0s linear 0s}.count .sort-menu .tab{width:100%;margin:0;padding:.6rem;border-radius:.5rem;border-bottom:0;font-size:.85rem}.count .sort-menu .tab:hover,.count .sort-menu .tab.active{background:var(--secondary);color:var(--accent)}}
 .script-meta small .kind{margin-inline-end:.4rem;padding:.05rem .35rem;border:1px solid var(--border);border-radius:4px;font-size:.65rem;font-weight:600;letter-spacing:.03em}
 .tab{position:relative}
-.tab::before{content:"";position:absolute;left:.75rem;right:.75rem;bottom:-1px;height:2px;border-radius:2px;background:var(--accent);transform:scaleX(0);transform-origin:center;opacity:.5;transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .25s}
-.tab:hover::before{transform:scaleX(.4)}
-.tab.active::before{transform:scaleX(1);opacity:1}
 .tab{margin-bottom:-1px;padding:.5rem .75rem;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);font:inherit;font-size:.85rem;cursor:pointer}
 .tab:hover{color:var(--accent)}
 .tab.active{color:var(--accent)}

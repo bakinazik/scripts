@@ -44,9 +44,6 @@ body.page{--wrap:#58a6ff}
 :root[data-theme=light] body.page{--wrap:#0969da}
 .tabs {display: flex;align-items: center;gap: .25rem;margin-bottom: -1.2rem;}
 .tab{position:relative}
-.tab::before{content:"";position:absolute;left:.75rem;right:.75rem;bottom:-1px;height:2px;border-radius:2px;background:var(--accent);transform:scaleX(0);transform-origin:center;opacity:.5;transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .25s}
-.tab:hover::before{transform:scaleX(.4)}
-.tab.active::before{transform:scaleX(1);opacity:1}
 .tab,.right{margin-bottom:-1px;padding:.5rem .75rem;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);font:inherit;font-size:.85rem;cursor:pointer}
 .tab:hover,.right:hover{color:var(--accent)}
 .tab.active{color:var(--accent)}

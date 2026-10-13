@@ -1,0 +1,32 @@
+{
+  "anti-video-pause/anti-video-pause.user.js": {
+    "added": "2026-10-04T19:44:55+03:00",
+    "updated": "2026-10-04T17:09:07.627Z",
+    "hash": "b1ad746f0668f080716f2dab104f80c25611812486cdb60dbfe5a8ba9a452303"
+  },
+  "background-playback/background-playback.user.js": {
+    "added": "2026-10-04T20:19:19+03:00",
+    "updated": "2026-10-04T20:19:19+03:00",
+    "hash": "22a46aca08d00b1f2fbcc557d690b0d2c67012c25168c6824c6e767a615f5973"
+  },
+  "better-youtube/better-youtube.user.css": {
+    "added": "2026-10-12T02:44:13+03:00",
+    "updated": "2026-10-12T02:44:13+03:00",
+    "hash": "f6e40d105e307f52cb6d4b0f8e3e59d57963e34ada892adf1c02a8dcd872ef15"
+  },
+  "github-repo-age/github-repo-age.user.js": {
+    "added": "2026-10-04T14:48:55+03:00",
+    "updated": "2026-10-04T15:17:57+03:00",
+    "hash": "58d63c10c1b06f91a4f0bf8aeab080e5dc458fe8258266f8a58e22b3450418e7"
+  },
+  "github-repo-file-downloader/github-repo-file-downloader.user.js": {
+    "added": "2026-10-04T14:48:55+03:00",
+    "updated": "2026-10-04T15:17:57+03:00",
+    "hash": "66c0284d259af2a6499c95401dc92c9e3a08bf6675c5e69172a2aa0e78de3a75"
+  },
+  "github-repo-subfolder-downloader/github-repo-subfolder-downloader.user.js": {
+    "added": "2026-10-04T14:48:55+03:00",
+    "updated": "2026-10-04T15:17:57+03:00",
+    "hash": "7423d54e57c69481c8c01312c919f61cc6da1f68f608924d5fbb19bd4014816c"
+  }
+}
